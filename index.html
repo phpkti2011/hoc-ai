@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tài liệu học AI cho người mới bắt đầu</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "Segoe UI", "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+    line-height: 1.75;
+    color: #2c3e50;
+    background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+    padding: 20px;
+  }
+  .container {
+    max-width: 920px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+    overflow: hidden;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 60px 50px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: "";
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+    background-size: 30px 30px;
+    opacity: 0.5;
+  }
+  .hero h1 {
+    font-size: 2.6em;
+    margin-bottom: 15px;
+    position: relative;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  }
+  .hero p {
+    font-size: 1.15em;
+    opacity: 0.95;
+    position: relative;
+  }
+  .hero-illustration {
+    margin: 30px auto 0;
+    position: relative;
+    max-width: 280px;
+  }
+
+  /* TOC */
+  .toc {
+    background: #f8f9fc;
+    padding: 30px 50px;
+    border-bottom: 2px solid #ecf0f3;
+  }
+  .toc h2 {
+    color: #667eea;
+    margin-bottom: 18px;
+    font-size: 1.3em;
+  }
+  .toc ol {
+    columns: 2;
+    column-gap: 30px;
+    list-style: none;
+    counter-reset: toc;
+  }
+  .toc li {
+    counter-increment: toc;
+    padding: 6px 0;
+    break-inside: avoid;
+  }
+  .toc li::before {
+    content: counter(toc) ". ";
+    color: #764ba2;
+    font-weight: bold;
+  }
+  .toc a {
+    color: #2c3e50;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .toc a:hover { color: #667eea; }
+
+  /* CONTENT */
+  .content { padding: 50px; }
+  section {
+    margin-bottom: 60px;
+    scroll-margin-top: 20px;
+  }
+  h2.section-title {
+    font-size: 1.9em;
+    color: #2c3e50;
+    margin-bottom: 25px;
+    padding-bottom: 12px;
+    border-bottom: 4px solid;
+    border-image: linear-gradient(90deg, #667eea, #764ba2) 1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  h2.section-title .badge {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7em;
+    flex-shrink: 0;
+  }
+  h3 {
+    color: #5a4b8e;
+    margin: 25px 0 12px;
+    font-size: 1.25em;
+  }
+  h4 { color: #667eea; margin: 18px 0 8px; }
+  p { margin-bottom: 12px; }
+  ul, ol { margin: 12px 0 12px 25px; }
+  li { margin-bottom: 6px; }
+
+  /* QUOTE */
+  .quote {
+    background: linear-gradient(135deg, #fff5f5 0%, #fef6e4 100%);
+    border-left: 5px solid #f59e0b;
+    padding: 22px 28px;
+    margin: 25px 0;
+    border-radius: 0 12px 12px 0;
+    font-style: italic;
+    position: relative;
+  }
+  .quote::before {
+    content: "\201C";
+    font-size: 4em;
+    color: #f59e0b;
+    position: absolute;
+    top: -10px; left: 10px;
+    line-height: 1;
+    opacity: 0.3;
+  }
+  .quote p { margin: 0 0 8px 30px; font-size: 1.05em; color: #4a4a4a; }
+  .quote cite {
+    display: block;
+    margin-left: 30px;
+    margin-top: 8px;
+    font-style: normal;
+    font-weight: 600;
+    color: #b45309;
+    font-size: 0.92em;
+  }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+  }
+  th {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    padding: 14px;
+    text-align: left;
+    font-weight: 600;
+  }
+  td {
+    padding: 12px 14px;
+    border-bottom: 1px solid #ecf0f3;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) { background: #fafbfd; }
+
+  /* CARDS */
+  .ai-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 18px;
+    margin: 25px 0;
+  }
+  .ai-card {
+    background: white;
+    border-radius: 14px;
+    padding: 22px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.07);
+    border-top: 4px solid #667eea;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .ai-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(102,126,234,0.18);
+  }
+  .ai-card.star { border-top-color: #f59e0b; }
+  .ai-card h4 {
+    margin-top: 0;
+    font-size: 1.15em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .ai-card .url {
+    font-size: 0.85em;
+    color: #667eea;
+    background: #f0f4ff;
+    padding: 4px 10px;
+    border-radius: 6px;
+    display: inline-block;
+    margin: 8px 0;
+    font-family: "Consolas", monospace;
+  }
+  .ai-card p { font-size: 0.93em; margin-bottom: 6px; }
+
+  /* PROMPT BOX */
+  .prompt {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    color: #e2e8f0;
+    padding: 18px 22px;
+    border-radius: 10px;
+    margin: 14px 0;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 0.95em;
+    border-left: 4px solid #10b981;
+    position: relative;
+  }
+  .prompt::before {
+    content: "💬 PROMPT MẪU";
+    position: absolute;
+    top: -10px; left: 15px;
+    background: #10b981;
+    color: white;
+    font-size: 0.7em;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-family: sans-serif;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+  }
+
+  /* TIP / WARNING */
+  .tip, .warning, .exercise {
+    padding: 18px 22px;
+    border-radius: 12px;
+    margin: 20px 0;
+  }
+  .tip {
+    background: #ecfdf5;
+    border-left: 5px solid #10b981;
+  }
+  .tip h4 { color: #047857; margin-top: 0; }
+  .warning {
+    background: #fef2f2;
+    border-left: 5px solid #ef4444;
+  }
+  .warning h4 { color: #b91c1c; margin-top: 0; }
+  .exercise {
+    background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
+    border-left: 5px solid #f59e0b;
+  }
+  .exercise h4 {
+    color: #b45309;
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.1em;
+  }
+
+  /* COMPARISON */
+  .vs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 20px 0;
+  }
+  .vs-good, .vs-bad {
+    padding: 18px;
+    border-radius: 12px;
+  }
+  .vs-good {
+    background: #ecfdf5;
+    border-top: 4px solid #10b981;
+  }
+  .vs-bad {
+    background: #fef2f2;
+    border-top: 4px solid #ef4444;
+  }
+
+  /* FORMULA */
+  .formula {
+    background: linear-gradient(135deg, #ddd6fe 0%, #fbcfe8 100%);
+    padding: 25px;
+    border-radius: 14px;
+    text-align: center;
+    margin: 25px 0;
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #5b21b6;
+    letter-spacing: 1px;
+    box-shadow: 0 6px 20px rgba(139,92,246,0.15);
+  }
+
+  /* ILLUSTRATION CARD */
+  .illustration {
+    text-align: center;
+    margin: 30px 0;
+    padding: 25px;
+    background: #f8f9fc;
+    border-radius: 14px;
+  }
+  .illustration svg { max-width: 100%; height: auto; }
+  .illustration .caption {
+    margin-top: 12px;
+    font-style: italic;
+    color: #6b7280;
+    font-size: 0.92em;
+  }
+
+  /* TIMELINE */
+  .timeline { margin: 25px 0; padding-left: 20px; border-left: 3px solid #667eea; }
+  .timeline-item {
+    margin-bottom: 20px;
+    padding-left: 25px;
+    position: relative;
+  }
+  .timeline-item::before {
+    content: "";
+    width: 16px; height: 16px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-radius: 50%;
+    position: absolute;
+    left: -29px; top: 5px;
+    box-shadow: 0 0 0 4px white;
+  }
+  .timeline-item h4 { margin-top: 0; }
+
+  /* FOOTER */
+  footer {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    color: #cbd5e1;
+    padding: 40px 50px;
+    text-align: center;
+  }
+  footer h3 { color: white; margin-bottom: 15px; }
+  footer p { margin-bottom: 8px; }
+
+  @media (max-width: 700px) {
+    .content { padding: 25px; }
+    .hero { padding: 40px 25px; }
+    .hero h1 { font-size: 1.8em; }
+    .toc { padding: 25px; }
+    .toc ol { columns: 1; }
+    .vs-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- HERO -->
+<header class="hero">
+  <h1>🤖 Tài liệu học AI cho người mới bắt đầu</h1>
+  <p>Dành cho người chưa từng tiếp cận AI · Dễ hiểu · Có bài tập thực hành</p>
+  <div class="hero-illustration">
+    <svg viewBox="0 0 280 160" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#fbbf24"/>
+          <stop offset="100%" stop-color="#f59e0b"/>
+        </linearGradient>
+      </defs>
+      <!-- Robot head -->
+      <rect x="100" y="30" width="80" height="70" rx="14" fill="white" stroke="#fbbf24" stroke-width="3"/>
+      <circle cx="125" cy="60" r="7" fill="#667eea"/>
+      <circle cx="155" cy="60" r="7" fill="#667eea"/>
+      <circle cx="125" cy="60" r="2.5" fill="white"/>
+      <circle cx="155" cy="60" r="2.5" fill="white"/>
+      <rect x="125" y="78" width="30" height="6" rx="3" fill="#fbbf24"/>
+      <line x1="140" y1="20" x2="140" y2="30" stroke="white" stroke-width="3"/>
+      <circle cx="140" cy="18" r="4" fill="url(#g1)"/>
+      <rect x="85" y="55" width="10" height="20" rx="3" fill="white"/>
+      <rect x="185" y="55" width="10" height="20" rx="3" fill="white"/>
+      <!-- Speech bubble -->
+      <ellipse cx="50" cy="70" rx="35" ry="22" fill="white"/>
+      <text x="50" y="76" text-anchor="middle" font-size="20" fill="#667eea">Hi 👋</text>
+      <!-- Sparkles -->
+      <text x="220" y="50" font-size="22">✨</text>
+      <text x="30" y="130" font-size="22">⭐</text>
+      <text x="240" y="120" font-size="22">💡</text>
+    </svg>
+  </div>
+</header>
+
+<!-- TOC -->
+<nav class="toc">
+  <h2>📚 Mục lục</h2>
+  <ol>
+    <li><a href="#bai1">AI là gì? Hiểu đơn giản nhất</a></li>
+    <li><a href="#bai2">Các trợ lý AI nổi tiếng</a></li>
+    <li><a href="#bai3">Cách bắt đầu sử dụng AI</a></li>
+    <li><a href="#bai4">Nghệ thuật ra lệnh cho AI (Prompt)</a></li>
+    <li><a href="#bai5">Ứng dụng AI vào công việc</a></li>
+    <li><a href="#bai6">Ứng dụng AI vào cuộc sống</a></li>
+    <li><a href="#bai7">AI tạo hình ảnh, video, âm thanh</a></li>
+    <li><a href="#bai8">Lưu ý quan trọng khi dùng AI</a></li>
+    <li><a href="#bai9">Bài tập tổng hợp</a></li>
+    <li><a href="#bai10">Lộ trình học tiếp theo</a></li>
+  </ol>
+</nav>
+
+<div class="content">
+
+<!-- TRÍCH DẪN MỞ ĐẦU -->
+<div class="quote">
+  <p>"Trí tuệ nhân tạo có thể là điều tốt đẹp nhất, hoặc tồi tệ nhất, từng xảy đến với nhân loại. Vì vậy, chúng ta cần học cách sử dụng nó đúng đắn."</p>
+  <cite>— Stephen Hawking, Nhà vật lý lý thuyết</cite>
+</div>
+
+<!-- BÀI 1 -->
+<section id="bai1">
+  <h2 class="section-title"><span class="badge">01</span> AI là gì? Hiểu đơn giản nhất</h2>
+
+  <h3>Hình dung dễ hiểu</h3>
+  <p>Hãy tưởng tượng bạn có một <strong>người trợ lý rất thông minh</strong>, đã đọc gần như toàn bộ sách báo, tài liệu trên thế giới. Người này có thể:</p>
+  <ul>
+    <li>Trả lời mọi câu hỏi của bạn</li>
+    <li>Viết email, bài văn, kế hoạch giúp bạn</li>
+    <li>Dịch ngôn ngữ, tóm tắt tài liệu dài</li>
+    <li>Vẽ tranh, tạo hình ảnh, sáng tác nhạc</li>
+  </ul>
+  <p>Người trợ lý đó chính là <strong>AI (Artificial Intelligence – Trí tuệ nhân tạo)</strong>.</p>
+
+  <div class="illustration">
+    <svg viewBox="0 0 500 180" xmlns="http://www.w3.org/2000/svg">
+      <!-- Person -->
+      <circle cx="80" cy="60" r="25" fill="#fbbf24"/>
+      <rect x="60" y="85" width="40" height="55" rx="8" fill="#667eea"/>
+      <text x="80" y="165" text-anchor="middle" font-size="13" fill="#2c3e50" font-weight="bold">Bạn</text>
+      <!-- Arrow -->
+      <line x1="115" y1="110" x2="200" y2="110" stroke="#10b981" stroke-width="3" marker-end="url(#arr)"/>
+      <text x="155" y="100" text-anchor="middle" font-size="12" fill="#10b981">câu hỏi</text>
+      <!-- AI -->
+      <rect x="210" y="60" width="80" height="80" rx="14" fill="white" stroke="#764ba2" stroke-width="3"/>
+      <circle cx="232" cy="90" r="6" fill="#764ba2"/>
+      <circle cx="268" cy="90" r="6" fill="#764ba2"/>
+      <rect x="232" y="108" width="36" height="6" rx="3" fill="#764ba2"/>
+      <text x="250" y="165" text-anchor="middle" font-size="13" fill="#2c3e50" font-weight="bold">AI</text>
+      <!-- Arrow back -->
+      <line x1="300" y1="110" x2="385" y2="110" stroke="#f59e0b" stroke-width="3" marker-end="url(#arr2)"/>
+      <text x="342" y="100" text-anchor="middle" font-size="12" fill="#f59e0b">câu trả lời</text>
+      <!-- Result -->
+      <rect x="395" y="70" width="90" height="80" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+      <line x1="405" y1="90" x2="475" y2="90" stroke="#b45309" stroke-width="2"/>
+      <line x1="405" y1="105" x2="475" y2="105" stroke="#b45309" stroke-width="2"/>
+      <line x1="405" y1="120" x2="455" y2="120" stroke="#b45309" stroke-width="2"/>
+      <text x="440" y="165" text-anchor="middle" font-size="13" fill="#2c3e50" font-weight="bold">Kết quả</text>
+      <defs>
+        <marker id="arr" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+          <polygon points="0 0, 10 3, 0 6" fill="#10b981"/>
+        </marker>
+        <marker id="arr2" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+          <polygon points="0 0, 10 3, 0 6" fill="#f59e0b"/>
+        </marker>
+      </defs>
+    </svg>
+    <div class="caption">Cách AI làm việc: Bạn hỏi → AI suy nghĩ → AI trả lời</div>
+  </div>
+
+  <h3>AI khác Google ở điểm nào?</h3>
+  <table>
+    <thead>
+      <tr><th>Google</th><th>AI (như ChatGPT)</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Đưa ra danh sách website</td><td>Trả lời thẳng câu hỏi của bạn</td></tr>
+      <tr><td>Bạn phải đọc nhiều trang để tìm</td><td>Tổng hợp sẵn cho bạn</td></tr>
+      <tr><td>Không hiểu ngữ cảnh</td><td>Hiểu ý bạn, hỏi lại nếu cần</td></tr>
+      <tr><td>Không "viết" hộ bạn</td><td>Viết email, bài văn, kế hoạch</td></tr>
+    </tbody>
+  </table>
+
+  <div class="quote">
+    <p>"AI sẽ không thay thế con người. Nhưng người biết sử dụng AI sẽ thay thế người không biết sử dụng AI."</p>
+    <cite>— Karim Lakhani, Giáo sư Đại học Harvard</cite>
+  </div>
+
+  <div class="exercise">
+    <h4>✏️ Bài tập 1</h4>
+    <ol>
+      <li>Viết ra <strong>3 việc</strong> trong tuần qua mà bạn thấy mất thời gian, có thể nhờ AI làm giúp.</li>
+      <li>Hỏi người thân: "Anh/chị đã nghe nói về ChatGPT chưa?" – Ghi lại câu trả lời.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- BÀI 2 -->
+<section id="bai2">
+  <h2 class="section-title"><span class="badge">02</span> Các trợ lý AI nổi tiếng hiện nay</h2>
+  <p>Hiện nay có rất nhiều AI. Dưới đây là những cái <strong>phổ biến nhất</strong>, đa số đều có <strong>bản miễn phí</strong>:</p>
+
+  <div class="ai-grid">
+    <div class="ai-card star">
+      <h4>⭐ ChatGPT</h4>
+      <span class="url">chatgpt.com</span>
+      <p><strong>Của:</strong> OpenAI (Mỹ)</p>
+      <p>Phổ biến nhất thế giới, dễ dùng, trả lời tiếng Việt tốt. <strong>Nên học đầu tiên.</strong></p>
+    </div>
+    <div class="ai-card star">
+      <h4>⭐ Claude</h4>
+      <span class="url">claude.ai</span>
+      <p><strong>Của:</strong> Anthropic (Mỹ)</p>
+      <p>Viết văn rất tự nhiên, đọc & phân tích tài liệu dài rất giỏi.</p>
+    </div>
+    <div class="ai-card star">
+      <h4>⭐ Gemini</h4>
+      <span class="url">gemini.google.com</span>
+      <p><strong>Của:</strong> Google</p>
+      <p>Kết nối Gmail, Google Docs, tìm thông tin mới nhất.</p>
+    </div>
+    <div class="ai-card">
+      <h4>🪟 Copilot</h4>
+      <span class="url">copilot.microsoft.com</span>
+      <p><strong>Của:</strong> Microsoft</p>
+      <p>Tích hợp sẵn trong Windows, Word, Excel.</p>
+    </div>
+    <div class="ai-card">
+      <h4>🚀 Grok</h4>
+      <span class="url">grok.com</span>
+      <p><strong>Của:</strong> xAI (Elon Musk)</p>
+      <p>Cập nhật tin tức nhanh, tính cách "vui vẻ".</p>
+    </div>
+    <div class="ai-card">
+      <h4>🔍 DeepSeek</h4>
+      <span class="url">chat.deepseek.com</span>
+      <p><strong>Của:</strong> DeepSeek (Trung Quốc)</p>
+      <p>Miễn phí hoàn toàn, giỏi tính toán & lập luận.</p>
+    </div>
+  </div>
+
+  <h3>AI chuyên ngành nổi bật</h3>
+  <table>
+    <thead><tr><th>Lĩnh vực</th><th>Công cụ</th><th>Dùng để</th></tr></thead>
+    <tbody>
+      <tr><td>🎨 Vẽ tranh, ảnh</td><td>Midjourney, DALL-E, Leonardo</td><td>Tạo ảnh nghệ thuật, sản phẩm</td></tr>
+      <tr><td>🎵 Sáng tác nhạc</td><td>Suno, Udio</td><td>Tự sáng tác bài hát</td></tr>
+      <tr><td>🗣️ Đọc văn bản</td><td>ElevenLabs</td><td>Tạo giọng nói thật</td></tr>
+      <tr><td>🎬 Tạo video</td><td>Sora, Veo, Runway</td><td>Video từ chữ</td></tr>
+      <tr><td>🔎 Tìm kiếm thông minh</td><td>Perplexity</td><td>Google "thông minh" có dẫn nguồn</td></tr>
+      <tr><td>📓 Đọc tài liệu</td><td>NotebookLM</td><td>Tóm tắt, làm podcast</td></tr>
+    </tbody>
+  </table>
+
+  <div class="tip">
+    <h4>💡 Lời khuyên cho người mới</h4>
+    <p>Đừng học cùng lúc nhiều AI. Hãy <strong>chọn 1 cái</strong> (gợi ý: <strong>ChatGPT</strong> hoặc <strong>Gemini</strong>) và dùng thật quen, rồi mới thử cái khác.</p>
+  </div>
+
+  <div class="quote">
+    <p>"Phát triển trí tuệ nhân tạo có thể là sự kiện quan trọng nhất trong lịch sử nền văn minh của chúng ta."</p>
+    <cite>— Sundar Pichai, CEO Google</cite>
+  </div>
+
+  <div class="exercise">
+    <h4>✏️ Bài tập 2</h4>
+    <ol>
+      <li>Mở điện thoại/máy tính, vào trang <strong>chatgpt.com</strong></li>
+      <li>Nhấn "Sign up" để đăng ký bằng email Google</li>
+      <li>Gõ thử câu: <em>"Chào bạn, hôm nay mình mới làm quen với AI, bạn giúp được mình những gì?"</em></li>
+      <li>Đọc câu trả lời và ghi lại cảm nhận.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- BÀI 3 -->
+<section id="bai3">
+  <h2 class="section-title"><span class="badge">03</span> Cách bắt đầu sử dụng AI (từng bước)</h2>
+
+  <h3>Cần chuẩn bị gì?</h3>
+  <ul>
+    <li>Một <strong>điện thoại thông minh</strong> hoặc <strong>máy tính</strong> có internet</li>
+    <li>Một <strong>địa chỉ email</strong> (Gmail là tiện nhất)</li>
+    <li>Khoảng <strong>5 phút</strong> để đăng ký</li>
+  </ul>
+
+  <h3>Các bước đăng ký ChatGPT</h3>
+  <div class="timeline">
+    <div class="timeline-item"><h4>Bước 1</h4><p>Mở trình duyệt (Chrome, Cốc Cốc, Safari…)</p></div>
+    <div class="timeline-item"><h4>Bước 2</h4><p>Gõ vào ô địa chỉ: <code>chatgpt.com</code></p></div>
+    <div class="timeline-item"><h4>Bước 3</h4><p>Nhấn nút <strong>"Sign up"</strong> ở góc trên bên phải</p></div>
+    <div class="timeline-item"><h4>Bước 4</h4><p>Chọn <strong>"Continue with Google"</strong> → chọn email Gmail</p></div>
+    <div class="timeline-item"><h4>Bước 5</h4><p>Điền tên, ngày sinh → Nhấn <strong>"Continue"</strong></p></div>
+    <div class="timeline-item"><h4>Bước 6</h4><p>🎉 Xong! Bạn có thể bắt đầu gõ câu hỏi vào ô chat.</p></div>
+  </div>
+
+  <div class="illustration">
+    <svg viewBox="0 0 500 240" xmlns="http://www.w3.org/2000/svg">
+      <!-- Browser frame -->
+      <rect x="20" y="20" width="460" height="200" rx="10" fill="white" stroke="#e5e7eb" stroke-width="2"/>
+      <rect x="20" y="20" width="460" height="30" rx="10" fill="#f3f4f6"/>
+      <circle cx="40" cy="35" r="5" fill="#ef4444"/>
+      <circle cx="55" cy="35" r="5" fill="#f59e0b"/>
+      <circle cx="70" cy="35" r="5" fill="#10b981"/>
+      <rect x="90" y="28" width="370" height="14" rx="7" fill="white"/>
+      <text x="100" y="39" font-size="11" fill="#9ca3af">chatgpt.com</text>
+      <!-- Sidebar -->
+      <rect x="20" y="50" width="100" height="170" fill="#f9fafb"/>
+      <rect x="30" y="65" width="80" height="14" rx="3" fill="#667eea"/>
+      <text x="70" y="76" text-anchor="middle" font-size="9" fill="white">+ New chat</text>
+      <rect x="30" y="90" width="80" height="8" rx="2" fill="#e5e7eb"/>
+      <rect x="30" y="105" width="80" height="8" rx="2" fill="#e5e7eb"/>
+      <rect x="30" y="120" width="60" height="8" rx="2" fill="#e5e7eb"/>
+      <!-- Chat area -->
+      <text x="300" y="100" text-anchor="middle" font-size="14" fill="#9ca3af">[Cuộc trò chuyện hiển thị ở đây]</text>
+      <rect x="140" y="180" width="320" height="30" rx="15" fill="white" stroke="#667eea" stroke-width="2"/>
+      <text x="155" y="200" font-size="11" fill="#9ca3af">Gõ câu hỏi của bạn vào đây...</text>
+      <circle cx="445" cy="195" r="10" fill="#667eea"/>
+      <text x="445" y="199" text-anchor="middle" font-size="11" fill="white">▶</text>
+    </svg>
+    <div class="caption">Giao diện cơ bản của ChatGPT</div>
+  </div>
+
+  <h3>Quy tắc vàng khi nói chuyện với AI</h3>
+  <div class="vs-grid">
+    <div class="vs-good">
+      <h4>✅ NÊN</h4>
+      <ul>
+        <li>Nói chuyện như nói với người thật</li>
+        <li>Viết tiếng Việt có dấu</li>
+        <li>Càng cụ thể càng tốt</li>
+        <li>Hỏi tiếp nếu chưa rõ</li>
+      </ul>
+    </div>
+    <div class="vs-bad">
+      <h4>❌ KHÔNG NÊN</h4>
+      <ul>
+        <li>Viết quá ngắn cộc lốc</li>
+        <li>Đưa thông tin cá nhân nhạy cảm</li>
+        <li>Tin 100% với việc quan trọng</li>
+        <li>Dùng ngôn ngữ khó hiểu</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <h4>✏️ Bài tập 3</h4>
+    <p>Hãy thử gõ 3 câu sau vào ChatGPT:</p>
+    <div class="prompt">1. "Bạn hãy giới thiệu bản thân bằng tiếng Việt, dễ hiểu cho người lớn tuổi."</div>
+    <div class="prompt">2. "Hôm nay tôi nên ăn gì cho bữa trưa? Tôi có thịt heo, rau cải, cà chua, trứng."</div>
+    <div class="prompt">3. "Hãy kể cho tôi một câu chuyện vui ngắn để cười."</div>
+  </div>
+</section>
+
+<!-- BÀI 4 -->
+<section id="bai4">
+  <h2 class="section-title"><span class="badge">04</span> Nghệ thuật ra lệnh cho AI (Prompt)</h2>
+
+  <p><strong>Prompt</strong> = câu lệnh, câu hỏi bạn đưa cho AI. Cùng một câu hỏi, prompt tốt cho kết quả tốt gấp 10 lần prompt dở.</p>
+
+  <div class="vs-grid">
+    <div class="vs-bad">
+      <h4>❌ Prompt dở</h4>
+      <p><em>"Viết email"</em></p>
+      <p><small>AI không biết viết cho ai, về việc gì.</small></p>
+    </div>
+    <div class="vs-good">
+      <h4>✅ Prompt tốt</h4>
+      <p><em>"Viết email gửi sếp xin nghỉ phép 2 ngày (T5, T6 tuần này) vì việc gia đình. Giọng văn lễ phép, ngắn gọn."</em></p>
+    </div>
+  </div>
+
+  <h3>Công thức prompt CHUẨN cho người mới</h3>
+  <div class="formula">VAI &nbsp;→&nbsp; VIỆC &nbsp;→&nbsp; CHI TIẾT &nbsp;→&nbsp; KIỂU</div>
+
+  <table>
+    <thead><tr><th>Thành phần</th><th>Ý nghĩa</th><th>Ví dụ</th></tr></thead>
+    <tbody>
+      <tr><td><strong>VAI</strong></td><td>AI đóng vai gì?</td><td>"Bạn là một giáo viên tiếng Anh…"</td></tr>
+      <tr><td><strong>VIỆC</strong></td><td>Cần làm việc gì?</td><td>"…hãy giải thích cho tôi…"</td></tr>
+      <tr><td><strong>CHI TIẾT</strong></td><td>Nội dung cụ thể</td><td>"…cách dùng thì hiện tại đơn…"</td></tr>
+      <tr><td><strong>KIỂU</strong></td><td>Trình bày thế nào?</td><td>"…bằng tiếng Việt, có ví dụ, dễ hiểu cho người 50 tuổi."</td></tr>
+    </tbody>
+  </table>
+
+  <div class="prompt">"Bạn là một giáo viên tiếng Anh giỏi. Hãy giải thích cho tôi cách dùng thì hiện tại đơn bằng tiếng Việt, có 3 ví dụ, dễ hiểu cho người 50 tuổi mới học."</div>
+
+  <h3>5 mẹo nâng cao</h3>
+  <ul>
+    <li><strong>🎯 Mẹo 1:</strong> Nói rõ <em>đối tượng đọc</em> ("…viết cho học sinh lớp 5")</li>
+    <li><strong>🎯 Mẹo 2:</strong> Yêu cầu <em>độ dài</em> ("…trong khoảng 100 từ")</li>
+    <li><strong>🎯 Mẹo 3:</strong> Yêu cầu <em>định dạng</em> ("…dạng gạch đầu dòng / bảng so sánh")</li>
+    <li><strong>🎯 Mẹo 4:</strong> Cho AI <em>ví dụ mẫu</em> ("Viết theo phong cách như: [dán ví dụ]")</li>
+    <li><strong>🎯 Mẹo 5:</strong> Bảo AI <em>sửa lại</em> ("Viết ngắn hơn", "Đổi giọng văn thân thiện hơn")</li>
+  </ul>
+
+  <div class="quote">
+    <p>"Khả năng đặt câu hỏi đúng sẽ là kỹ năng quan trọng nhất trong thời đại AI."</p>
+    <cite>— Sam Altman, CEO OpenAI (cha đẻ ChatGPT)</cite>
+  </div>
+
+  <div class="exercise">
+    <h4>✏️ Bài tập 4</h4>
+    <p>Dùng công thức <strong>VAI – VIỆC – CHI TIẾT – KIỂU</strong> viết prompt cho:</p>
+    <ol>
+      <li>Lời chúc mừng đám cưới cho đứa cháu</li>
+      <li>Thực đơn ăn uống 1 tuần cho người tiểu đường</li>
+      <li>Giải thích "Bitcoin là gì" cho bố mẹ</li>
+    </ol>
+  </div>
+</section>
+
+<!-- BÀI 5 -->
+<section id="bai5">
+  <h2 class="section-title"><span class="badge">05</span> Ứng dụng AI vào công việc hằng ngày</h2>
+
+  <h3>📧 Cho người làm văn phòng</h3>
+  <p><strong>Viết email:</strong></p>
+  <div class="prompt">"Viết email gửi đối tác A xin gia hạn hợp đồng thêm 1 tháng. Lý do: công ty đang chuyển văn phòng. Giọng văn lịch sự, chuyên nghiệp."</div>
+
+  <p><strong>Làm Excel:</strong></p>
+  <div class="prompt">"Tôi có cột A là tên khách hàng, cột B là số tiền. Hãy chỉ tôi công thức Excel để tính tổng tiền của khách tên có chữ 'Nguyễn'."</div>
+
+  <p><strong>Tóm tắt tài liệu:</strong> Dán nguyên văn bản → "Hãy tóm tắt văn bản trên trong 5 ý chính."</p>
+
+  <h3>🛒 Cho người kinh doanh / bán hàng</h3>
+  <div class="prompt">"Viết bài đăng Facebook bán áo thun nữ giá 199k, chất cotton, 5 màu, miễn phí giao hàng. Văn phong vui vẻ, có icon, kêu gọi mua hàng."</div>
+
+  <h3>📚 Cho giáo viên / phụ huynh</h3>
+  <div class="prompt">"Soạn giáo án dạy bài 'Phép cộng có nhớ' cho học sinh lớp 2, có ví dụ, có trò chơi."</div>
+
+  <h3>✍️ Cho người làm nghề tự do</h3>
+  <div class="prompt">"Viết kịch bản video TikTok 60 giây giới thiệu món bún bò Huế gia truyền, có hook ở 3 giây đầu."</div>
+
+  <div class="quote">
+    <p>"AI sẽ giải phóng chúng ta khỏi những công việc lặp đi lặp lại, để chúng ta tập trung vào những việc thực sự sáng tạo và có ý nghĩa."</p>
+    <cite>— Satya Nadella, CEO Microsoft</cite>
+  </div>
+
+  <div class="exercise">
+    <h4>✏️ Bài tập 5</h4>
+    <p>Chọn <strong>1 việc</strong> bạn làm hằng ngày, viết prompt nhờ AI giúp, áp dụng kết quả vào việc thật, ghi lại: <em>tiết kiệm được bao nhiêu phút?</em></p>
+  </div>
+</section>
+
+<!-- BÀI 6 -->
+<section id="bai6">
+  <h2 class="section-title"><span class="badge">06</span> Ứng dụng AI vào cuộc sống</h2>
+
+  <div class="ai-grid">
+    <div class="ai-card"><h4>🍳 Nấu ăn</h4><p>"Tôi có thịt gà, khoai tây, cà rốt. Gợi ý 3 món với cách làm chi tiết."</p></div>
+    <div class="ai-card"><h4>🏥 Sức khỏe</h4><p>"Tôi đau đầu vùng thái dương 2 ngày. Có thể là bệnh gì? Khi nào cần đi khám?" <small>(tham khảo)</small></p></div>
+    <div class="ai-card"><h4>✈️ Du lịch</h4><p>"Lên kế hoạch Đà Lạt 3 ngày 2 đêm cho gia đình 4 người, ngân sách 10 triệu."</p></div>
+    <div class="ai-card"><h4>💰 Tài chính</h4><p>"Lương 15 triệu/tháng, độc thân, ở Sài Gòn. Chia ngân sách hợp lý."</p></div>
+    <div class="ai-card"><h4>📖 Học ngoại ngữ</h4><p>"Lộ trình học tiếng Anh 30 ngày, mỗi ngày 30 phút, cho người mới."</p></div>
+    <div class="ai-card"><h4>👶 Nuôi dạy con</h4><p>"Con 3 tuổi hay ăn vạ. Cho 5 cách xử lý bình tĩnh, không quát mắng."</p></div>
+    <div class="ai-card"><h4>🏡 Việc nhà</h4><p>"Cách tẩy vết dầu mỡ trên áo trắng bằng nguyên liệu có sẵn?"</p></div>
+    <div class="ai-card"><h4>🧘 Tinh thần</h4><p>"Tôi đang buồn chuyện công việc. Hãy nói chuyện với tôi như người bạn."</p></div>
+    <div class="ai-card"><h4>❤️ Viết thư</h4><p>"Viết thư cảm ơn mẹ ngày 8/3, chân thành, xúc động, ~200 từ."</p></div>
+  </div>
+
+  <div class="exercise">
+    <h4>✏️ Bài tập 6</h4>
+    <p>Tuần này, dùng AI cho ít nhất <strong>3 việc</strong>:</p>
+    <ul style="list-style:none; padding-left:0;">
+      <li>☐ Một bữa ăn (hỏi công thức)</li>
+      <li>☐ Một tin nhắn / lời chúc cho người thân</li>
+      <li>☐ Một câu hỏi kiến thức bạn tò mò từ lâu</li>
+    </ul>
+  </div>
+</section>
+
+<!-- BÀI 7 -->
+<section id="bai7">
+  <h2 class="section-title"><span class="badge">07</span> AI tạo hình ảnh, video, âm thanh</h2>
+
+  <div class="illustration">
+    <svg viewBox="0 0 500 140" xmlns="http://www.w3.org/2000/svg">
+      <rect x="20" y="20" width="140" height="100" rx="12" fill="#ddd6fe" stroke="#7c3aed" stroke-width="2"/>
+      <text x="90" y="55" text-anchor="middle" font-size="36">🎨</text>
+      <text x="90" y="95" text-anchor="middle" font-size="13" fill="#5b21b6" font-weight="bold">Hình ảnh</text>
+      <text x="90" y="110" text-anchor="middle" font-size="10" fill="#6b21a8">Midjourney, DALL-E</text>
+      <rect x="180" y="20" width="140" height="100" rx="12" fill="#fce7f3" stroke="#db2777" stroke-width="2"/>
+      <text x="250" y="55" text-anchor="middle" font-size="36">🎬</text>
+      <text x="250" y="95" text-anchor="middle" font-size="13" fill="#9d174d" font-weight="bold">Video</text>
+      <text x="250" y="110" text-anchor="middle" font-size="10" fill="#9d174d">Sora, Veo, Runway</text>
+      <rect x="340" y="20" width="140" height="100" rx="12" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+      <text x="410" y="55" text-anchor="middle" font-size="36">🎵</text>
+      <text x="410" y="95" text-anchor="middle" font-size="13" fill="#1e40af" font-weight="bold">Âm nhạc</text>
+      <text x="410" y="110" text-anchor="middle" font-size="10" fill="#1e40af">Suno, Udio</text>
+    </svg>
+    <div class="caption">3 nhánh AI sáng tạo phổ biến</div>
+  </div>
+
+  <h3>🎨 AI vẽ tranh</h3>
+  <p>Cách dễ nhất: dùng <strong>ChatGPT</strong> – có sẵn chức năng vẽ ảnh.</p>
+  <div class="prompt">"Vẽ giúp tôi hình ảnh: một cụ già đang ngồi câu cá bên bờ hồ vào buổi hoàng hôn, phong cách tranh sơn dầu, màu ấm."</div>
+
+  <h3>🎵 AI làm nhạc — Suno</h3>
+  <p>Vào <strong>suno.com</strong>, gõ chữ → AI tự sáng tác và hát luôn.</p>
+  <div class="prompt">"Hát một bài bolero buồn về quê hương, giọng nam"</div>
+
+  <h3>🎬 AI tạo video & 🗣️ AI đọc văn bản</h3>
+  <p>Sora, Veo, Runway tạo video ngắn từ chữ. ElevenLabs tạo giọng đọc thật như người.</p>
+
+  <div class="exercise">
+    <h4>✏️ Bài tập 7</h4>
+    <ol>
+      <li>Vào ChatGPT, yêu cầu vẽ <strong>chân dung gia đình bạn</strong> theo phong cách hoạt hình.</li>
+      <li>Vào <strong>suno.com</strong>, đăng ký, tạo bài hát mừng sinh nhật người thân.</li>
+      <li>Khoe sản phẩm với gia đình!</li>
+    </ol>
+  </div>
+</section>
+
+<!-- BÀI 8 -->
+<section id="bai8">
+  <h2 class="section-title"><span class="badge">08</span> Lưu ý quan trọng khi dùng AI</h2>
+
+  <div class="warning">
+    <h4>⚠️ AI có thể SAI</h4>
+    <p>AI đôi khi "bịa" thông tin nghe rất thật. Đặc biệt với: số liệu, ngày tháng, tên người, luật pháp, y tế, tài chính. <strong>Luôn kiểm tra lại</strong> với nguồn chính thống nếu việc quan trọng.</p>
+  </div>
+
+  <div class="warning">
+    <h4>🔒 Bảo mật thông tin – KHÔNG đưa cho AI:</h4>
+    <ul>
+      <li>Số CMND/CCCD đầy đủ</li>
+      <li>Mật khẩu ngân hàng, số thẻ tín dụng</li>
+      <li>Thông tin bí mật công ty</li>
+      <li>Hình ảnh cá nhân nhạy cảm</li>
+    </ul>
+  </div>
+
+  <div class="warning">
+    <h4>🎭 Cảnh giác lừa đảo deepfake</h4>
+    <p>Có kẻ xấu dùng AI giả giọng nói, khuôn mặt người thân để lừa tiền. Nếu nhận cuộc gọi/video lạ xin tiền → <strong>gọi lại bằng số quen</strong> để xác minh.</p>
+  </div>
+
+  <div class="tip">
+    <h4>💡 AI không thay được suy nghĩ của bạn</h4>
+    <p>AI là <strong>công cụ hỗ trợ</strong>, không phải người ra quyết định. Quyết định cuối cùng vẫn là của bạn. Đừng phụ thuộc 100%.</p>
+  </div>
+
+  <div class="quote">
+    <p>"Câu hỏi không phải là máy móc có suy nghĩ hay không, mà là con người có suy nghĩ hay không."</p>
+    <cite>— B.F. Skinner, Nhà tâm lý học</cite>
+  </div>
+
+  <div class="exercise">
+    <h4>✏️ Bài tập 8 — Tự kiểm tra</h4>
+    <ol>
+      <li>Bạn có nên đưa số CMND cho AI không? Vì sao?</li>
+      <li>AI nói "Thuốc X chữa khỏi ung thư" – bạn có tin ngay không?</li>
+      <li>Một người gọi điện giọng giống con bạn xin chuyển 50 triệu gấp – bạn làm gì?</li>
+    </ol>
+  </div>
+</section>
+
+<!-- BÀI 9 -->
+<section id="bai9">
+  <h2 class="section-title"><span class="badge">09</span> Bài tập tổng hợp</h2>
+  <p>Hoàn thành để chứng tỏ bạn đã <strong>làm chủ AI cơ bản</strong>:</p>
+
+  <div class="exercise">
+    <h4>🏆 Bài 1: "Một ngày với AI"</h4>
+    <p>Trong 1 ngày, dùng AI giải quyết 5 việc:</p>
+    <ol>
+      <li>Soạn 1 email/tin nhắn quan trọng</li>
+      <li>Hỏi 1 công thức nấu ăn</li>
+      <li>Tóm tắt 1 bài báo dài</li>
+      <li>Hỏi 1 kiến thức bạn luôn tò mò</li>
+      <li>Tạo 1 hình ảnh vui để khoe bạn bè</li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>🏆 Bài 2: "Giúp người thân"</h4>
+    <p>Dạy 1 người thân cách: đăng ký ChatGPT, hỏi 3 câu cơ bản, ghi lại phản ứng của họ.</p>
+  </div>
+
+  <div class="exercise">
+    <h4>🏆 Bài 3: "Viết prompt giỏi"</h4>
+    <p>Viết 5 prompt theo công thức VAI–VIỆC–CHI TIẾT–KIỂU cho:</p>
+    <ol>
+      <li>Lên kế hoạch tiết kiệm 100 triệu/2 năm</li>
+      <li>Bài phát biểu trong đám cưới em gái</li>
+      <li>Giải thích "blockchain" cho bố mẹ</li>
+      <li>Thực đơn giảm cân 1 tuần</li>
+      <li>Đơn xin việc cho công việc mơ ước</li>
+    </ol>
+  </div>
+
+  <div class="exercise">
+    <h4>🏆 Bài 4: "So sánh AI"</h4>
+    <p>Cùng 1 câu hỏi, hỏi 3 AI khác nhau (ChatGPT, Gemini, Claude) → so sánh: AI nào dễ hiểu nhất? chi tiết nhất? Bạn thích nhất?</p>
+  </div>
+
+  <div class="exercise">
+    <h4>🏆 Bài 5: "Dự án nhỏ"</h4>
+    <p>Chọn 1 dự án và dùng AI hoàn thành A→Z. Ví dụ: lên kế hoạch sinh nhật bất ngờ, viết bài thơ tặng bố/mẹ, lộ trình học tiếng Anh 3 tháng…</p>
+  </div>
+</section>
+
+<!-- BÀI 10 -->
+<section id="bai10">
+  <h2 class="section-title"><span class="badge">10</span> Lộ trình học tiếp theo</h2>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <h4>📅 Tuần 1: Làm quen</h4>
+      <p>Đăng ký ChatGPT. Hỏi mỗi ngày ít nhất 5 câu. Mục tiêu: quen với việc gõ và đọc trả lời của AI.</p>
+    </div>
+    <div class="timeline-item">
+      <h4>📅 Tuần 2: Áp dụng vào công việc</h4>
+      <p>Mỗi ngày dùng AI cho ít nhất 1 việc trong công việc. Học viết prompt theo công thức VAI–VIỆC–CHI TIẾT–KIỂU.</p>
+    </div>
+    <div class="timeline-item">
+      <h4>📅 Tuần 3: Áp dụng vào cuộc sống</h4>
+      <p>Dùng AI cho việc nhà, nấu ăn, sức khỏe, gia đình. Thử AI tạo hình ảnh.</p>
+    </div>
+    <div class="timeline-item">
+      <h4>📅 Tuần 4: Thử các AI khác</h4>
+      <p>Dùng thử Gemini, Claude. Thử Suno tạo nhạc. So sánh và chọn AI phù hợp nhất.</p>
+    </div>
+    <div class="timeline-item">
+      <h4>📅 Tháng 2 trở đi: Nâng cao</h4>
+      <p>Học cách "dạy" AI ghi nhớ thông tin. Tải file, đọc PDF, phân tích Excel. Theo dõi tin tức AI.</p>
+    </div>
+  </div>
+
+  <div class="quote">
+    <p>"Tương lai không thuộc về AI. Tương lai thuộc về những người biết hợp tác với AI."</p>
+    <cite>— Reid Hoffman, Đồng sáng lập LinkedIn</cite>
+  </div>
+</section>
+
+<!-- KHẮC PHỤC -->
+<section>
+  <h2 class="section-title"><span class="badge">📞</span> Khi gặp khó khăn</h2>
+  <table>
+    <thead><tr><th>Vấn đề</th><th>Giải pháp</th></tr></thead>
+    <tbody>
+      <tr><td>AI trả lời sai</td><td>Viết lại prompt rõ hơn, đầy đủ hơn</td></tr>
+      <tr><td>Không biết hỏi gì</td><td>Hỏi chính AI: "Bạn có thể giúp tôi những gì?"</td></tr>
+      <tr><td>AI trả lời tiếng Anh</td><td>Thêm: "Trả lời bằng tiếng Việt giúp tôi"</td></tr>
+      <tr><td>Câu trả lời quá dài</td><td>"Viết ngắn lại, dưới 5 dòng"</td></tr>
+      <tr><td>Câu trả lời khó hiểu</td><td>"Giải thích đơn giản hơn, như nói với người 60 tuổi"</td></tr>
+    </tbody>
+  </table>
+</section>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <h3>🎓 Lời kết</h3>
+  <p>AI không phải phép màu, cũng không đáng sợ. Nó là <strong style="color:#fbbf24;">một công cụ</strong> – như cái máy giặt giúp bạn giặt đồ, như xe máy giúp bạn đi nhanh hơn.</p>
+  <p style="margin-top:15px; font-size:1.1em; color:#fbbf24;">"Người biết dùng AI sẽ thay thế người không biết dùng AI."</p>
+  <p style="margin-top:20px; opacity:0.7; font-size:0.9em;">Hãy in ra, đánh dấu, ghi chú — và quan trọng nhất: <strong>THỰC HÀNH MỖI NGÀY</strong>. 🚀</p>
+</footer>
+
+</div>
+</body>
+</html>
